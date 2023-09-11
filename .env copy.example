@@ -1,0 +1,5 @@
+CONN_ST=postgres://USER:PASSWORD@localhost:5432/talenthail
+PORT=3000
+COOKIE_SECRET=somesecret
+NODE_ENV=development
+TOKEN=examplelongtoken
