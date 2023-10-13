@@ -35,6 +35,7 @@ export const createUser = async function (
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log(hashedPassword);
 
     const user = await postUser(
       firstName,

@@ -35,6 +35,7 @@ const userSchema = new Schema<User>({
     },
     required: [true, "gender is required"]
   },
+  password: { type: String, required: [true, "password is required"] },
   roles: [mongoose.Schema.ObjectId],
   createdAt: { type: Date, default: Date.now }
 });

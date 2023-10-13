@@ -8,12 +8,12 @@ var MongoDBStore = require("connect-mongodb-session")(session);
 import baseRoutes from "./routes/index";
 import authRoutes from "./routes/auth";
 import { connect } from "../connectmong";
-import { login, strategy } from "./controller/authenticating/service";
+import { serializeUser, strategy } from "./controller/authenticating/service";
 
 //For env File
 dotenv.config();
 const env = process.env.NODE_ENV || "development";
-
+console.log(process.env.TOKEN);
 //connect mongodb
 connect();
 const app: Application = express();
@@ -64,9 +64,12 @@ if (env == "development") {
     })
   );
 }
-
+app.use(passport.initialize());
+app.use(passport.session());
 passport.use(strategy);
-app.use("/", login, baseRoutes);
+serializeUser();
+app.use("/auth", authRoutes);
+app.use("/", baseRoutes);
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);
 });
