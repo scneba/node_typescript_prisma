@@ -1,31 +1,86 @@
-import express, { Express, Request, Response, Application } from "express";
-import prisma from "../../../client";
+import { Request, Response } from "express";
+import { writeBadRequest, writeSuccess } from "../../utils/response";
+import { validatePermission, validateUser, validateRole } from "./validate";
+import { postUser } from "../../data/userMong";
+import { postPermission } from "../../data/permission";
+import { postRole } from "../../data/role";
+import { User } from "../../model/user";
+import bcrypt from "bcrypt";
 
-export const _createUser = async function () {
-  const rand = Math.random() * 100;
-  const email = "alice" + Math.round(rand) + "@prisma.io";
-  return await prisma.user.create({
-    data: {
-      name: "Alice",
+export const createUser = async function (
+  req: Request,
+  res: Response<User | string>
+) {
+  const firstName = req.body.first_name;
+  const lastName = req.body.last_name;
+  const email = req.body.email;
+  const phone = req.body.phone;
+  const gender = req.body.gender;
+  const password = req.body.password;
+  const roles = req.body.roles;
+
+  try {
+    const errs = await validateUser(
+      firstName,
+      lastName,
+      phone,
       email,
-      posts: {
-        create: { title: "Hello World" }
-      },
-      profile: {
-        create: { bio: "I like turtles" }
-      }
+      gender,
+      password,
+      roles
+    );
+    if (errs.length > 0) {
+      writeBadRequest(res, errs);
+      return;
     }
-  });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await postUser(
+      firstName,
+      lastName,
+      phone,
+      email,
+      gender,
+      hashedPassword,
+      roles
+    );
+    writeSuccess(res, user);
+  } catch (e: any) {
+    console.error(e.message);
+    res.status(500).send("Ooops");
+  }
 };
 
-export const createUser = async function (req: Request, res: Response) {
+export const createPermission = async function (req: Request, res: Response) {
   try {
-    const user = await _createUser();
-    await prisma.$disconnect();
-    res.status(200).send(user);
+    const name = req.body.name;
+    const errs = await validatePermission(name);
+    if (errs.length > 0) {
+      writeBadRequest(res, errs);
+      return;
+    }
+    const perms = await postPermission(name);
+    writeSuccess(res, perms);
   } catch (e: any) {
     console.error(e);
-    await prisma.$disconnect();
-    res.status(500).send("Ooops");
+    res.status(500).end();
+  }
+};
+
+export const createRole = async function (req: Request, res: Response) {
+  try {
+    const name = req.body.name;
+    const perms = req.body.permissions;
+    const errs = await validateRole(name, perms);
+    if (errs.length > 0) {
+      writeBadRequest(res, errs);
+      return;
+    }
+    const role = await postRole(name, perms);
+    writeSuccess(res, role);
+  } catch (e: any) {
+    console.error(e);
+    res.status(500).end();
   }
 };
