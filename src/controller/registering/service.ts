@@ -56,12 +56,14 @@ export const createUser = async function (
 export const createPermission = async function (req: Request, res: Response) {
   try {
     const name = req.body.name;
-    const errs = await validatePermission(name);
+    const action = req.body.action;
+    const resource = req.body.resource;
+    const errs = await validatePermission(name, action, resource);
     if (errs.length > 0) {
       writeBadRequest(res, errs);
       return;
     }
-    const perms = await postPermission(name);
+    const perms = await postPermission(name, action, resource);
     writeSuccess(res, perms);
   } catch (e: any) {
     console.error(e);

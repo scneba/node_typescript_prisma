@@ -1,7 +1,9 @@
 import * as regErrors from "../controller/registering/errors";
+import * as authErrors from "../controller/authenticating/errors";
 
 type regErrorConst = (typeof regErrors)[keyof typeof regErrors];
-type ErrorCode = regErrorConst;
+type authErrorConst = (typeof authErrors)[keyof typeof authErrors];
+type ErrorCode = regErrorConst | authErrorConst;
 
 export interface Error {
   err_code: ErrorCode;

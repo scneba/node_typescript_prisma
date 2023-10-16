@@ -2,15 +2,13 @@ import { Permission } from "../model/permission";
 import mongoose, { Types } from "mongoose";
 
 export const postPermission = async function (
-  name: string
+  name: string,
+  action: string,
+  resource: string
 ): Promise<Permission> {
   try {
-    if (name) {
-      const perm = Permission.create({ name });
-      return perm;
-    } else {
-      throw "Permission name not found";
-    }
+    const perm = Permission.create({ name, action, resource });
+    return perm;
   } catch (exp) {
     throw exp;
   }

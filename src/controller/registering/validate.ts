@@ -1,11 +1,12 @@
 import { isValidObjectId } from "mongoose";
 import { getRole } from "../../data/role";
-import type { Permission } from "../../model/permission";
+import { Permission } from "../../model/permission";
 import { type Error, addError, buildError } from "../../utils/errors";
 import * as errors from "./errors";
 import { getUser } from "../../data/userMong";
 import type { User } from "../../model/user";
 import { getPermission } from "../../data/permission";
+import { actions, resources } from "../../data";
 export const validateUser = async (
   firstName: string,
   lastName: string,
@@ -100,13 +101,79 @@ export const validateUser = async (
   return errs;
 };
 
-export const validatePermission = async (name: string): Promise<Error[]> => {
+export const validatePermission = async (
+  name: string,
+  action: string,
+  resource: string
+): Promise<Error[]> => {
+  let errs: Error[] = [];
+  const data = { name, action, resource };
   if (!name) {
-    return buildError(errors.Required, "Permission name is required", "name", {
-      name
-    });
+    addError(
+      errs,
+      errors.Required,
+      "Permission name is required",
+      "name",
+      data
+    );
+  } else {
+    const perm = await Permission.findOne({ name });
+    if (perm) {
+      addError(
+        errs,
+        errors.Exists,
+        "Permission name already exist",
+        "name",
+        data
+      );
+    }
   }
-  return [];
+  if (!action) {
+    addError(
+      errs,
+      errors.Required,
+      "Permission action is required",
+      "action",
+      data
+    );
+  } else if (!actions.includes(action)) {
+    addError(
+      errs,
+      errors.InvalidAction,
+      "Permission action is invalid, get, list, create or update accepted",
+      "action",
+      data
+    );
+  }
+  if (!resource) {
+    addError(
+      errs,
+      errors.Required,
+      "Permission resource is required",
+      "resource",
+      data
+    );
+  } else if (!resources.includes(resource)) {
+    addError(
+      errs,
+      errors.InvalidResource,
+      `Resource ${resource} is invalid`,
+      "resource",
+      data
+    );
+  } else {
+    const perm = await Permission.findOne({ action, resource });
+    if (perm) {
+      addError(
+        errs,
+        errors.Exists,
+        `Permission with action and resource already exist with name ${perm.name}`,
+        "action",
+        data
+      );
+    }
+  }
+  return errs;
 };
 
 export const validateRole = async (

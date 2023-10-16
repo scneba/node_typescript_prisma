@@ -1,6 +1,6 @@
 import { Response } from "express";
 import { type Error } from "./errors";
-const writeResponse = function (
+export const writeResponse = function (
   res: Response,
   data: Record<string, any> | Record<string, any>[] | string | null,
   errors: Error[],

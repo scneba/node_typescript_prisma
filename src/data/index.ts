@@ -6,3 +6,5 @@ export const isValidObjectId = (id: string) => {
   }
   return false;
 };
+export const resources = ["permissions", "roles", "users"];
+export const actions = ["get", "list", "create", "update"];
