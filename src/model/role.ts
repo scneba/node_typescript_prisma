@@ -2,7 +2,7 @@ import mongoose, { model, Schema, Types } from "mongoose";
 import type { Permission } from "./permission";
 
 export interface Role {
-  _id: string;
+  _id: mongoose.Types.ObjectId;
   name: string;
   permissions: Permission[];
   createdAt?: Date;

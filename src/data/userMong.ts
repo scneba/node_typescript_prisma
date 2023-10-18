@@ -36,19 +36,22 @@ export const postUser = async function (
 
 export const getUser = async function (
   id: string,
-  email?: string
-): Promise<User | null> {
+  email?: string,
+  includePassword: boolean = false
+): Promise<Partial<User> | null> {
   if (id) {
-    return User.findById(id);
+    if (includePassword) return User.findById(id).populate("roles");
+    else return User.findById(id).select("-password").populate("roles");
   }
   if (email) {
-    return User.findOne({ email });
+    if (includePassword) return User.findOne({ email }).populate("roles");
+    else return User.findOne({ email }).select("-password").populate("roles");
   }
   return null;
 };
 
 export const findUsers = async function (): Promise<User[] | null> {
-  return User.find();
+  return User.find().select("-password");
 };
 export const updateDBUser = async function (
   id: string,
@@ -78,7 +81,7 @@ export const updateDBUser = async function (
   }
   try {
     await User.updateOne({ _id: id }, updates);
-    return User.findById(id);
+    return User.findById(id).populate("roles");
   } catch (exp) {
     throw exp;
   }

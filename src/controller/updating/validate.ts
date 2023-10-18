@@ -99,7 +99,7 @@ export const validatePasswordUpdate = async (
       { id }
     );
   } else {
-    const user = await getUser(id);
+    const user = await getUser(id, "", true);
     if (!user) {
       addError(
         errs,
@@ -109,7 +109,7 @@ export const validatePasswordUpdate = async (
         { id }
       );
     } else {
-      const match = await bcrypt.compare(oldPass, user.password);
+      const match = await bcrypt.compare(oldPass, user.password!);
       if (!match) {
         addError(errs, InvalidPassword, "Invalid password", "oldPassword");
       }

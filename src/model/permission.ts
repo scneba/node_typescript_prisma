@@ -1,7 +1,8 @@
-import { model, Schema, Types } from "mongoose";
+import mongoose, { model, Schema, Types } from "mongoose";
 import { Actions } from "../data";
 
 export interface Permission {
+  _id: mongoose.Types.ObjectId;
   name: string;
   resource: string;
   action: string;

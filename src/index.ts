@@ -8,7 +8,7 @@ var MongoDBStore = require("connect-mongodb-session")(session);
 
 import baseRoutes from "./routes/index";
 import authRoutes, { trimStrings } from "./routes/auth";
-import { connect } from "../connectmong";
+import { connect } from "./connectmong";
 import {
   authenticateRequest,
   strategy

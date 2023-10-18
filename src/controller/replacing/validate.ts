@@ -30,7 +30,7 @@ export const validateRoleForReplacement = async (
     addError(errs, sharedError.Required, `Role name is required`, "name", data);
   }
   const r = await getRole("", name);
-  if (r && r._id != id) {
+  if (r && r._id.toHexString() != id) {
     addError(
       errs,
       sharedError.Exists,

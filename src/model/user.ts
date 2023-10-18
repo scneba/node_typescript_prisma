@@ -6,6 +6,7 @@ import mongoose, {
 import type { Role } from "./role";
 
 export interface User {
+  _id: mongoose.Types.ObjectId;
   firstName: string;
   lastName: string;
   phone: string;
