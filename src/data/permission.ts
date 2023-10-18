@@ -32,3 +32,7 @@ export const findPermissions = async function (): Promise<
 > {
   return Permission.find();
 };
+export const deleteDbPermission = async function (id: string) {
+  await Permission.findOneAndRemove<Permission>({ _id: id });
+  return id;
+};

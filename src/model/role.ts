@@ -1,7 +1,8 @@
-import { model, Schema, Types } from "mongoose";
+import mongoose, { model, Schema, Types } from "mongoose";
 import type { Permission } from "./permission";
 
 export interface Role {
+  _id: string;
   name: string;
   permissions: Permission[];
   createdAt?: Date;

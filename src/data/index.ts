@@ -1,10 +1,14 @@
-import { Types } from "mongoose";
+import { isValidObjectId } from "mongoose";
 
-export const isValidObjectId = (id: string) => {
-  if (Types.ObjectId.isValid(id)) {
+export const isObjectIdValid = (id: string) => {
+  if (isValidObjectId(id)) {
     return true;
   }
   return false;
 };
-export const resources = ["permissions", "roles", "users"];
-export const actions = ["get", "list", "create", "update"];
+export const Resources = ["permissions", "roles", "users"] as const;
+export const Actions = ["get", "list", "create", "update"] as const;
+export const Genders = ["Male", "Female"] as const;
+export type Resources = (typeof Resources)[number];
+export type Actions = (typeof Actions)[number];
+export type Genders = (typeof Genders)[number];

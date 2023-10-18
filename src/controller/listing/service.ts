@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { writeSuccess } from "../../utils/response";
 import { getPermission, findPermissions } from "../../data/permission";
-import { getRole } from "../../data/role";
+import { findRole, getRole } from "../../data/role";
 
 export const getPermissions = async (req: Request, res: Response) => {
   const id = req.query.id;
@@ -25,11 +25,11 @@ export const getRoles = async (req: Request, res: Response) => {
   const name = req.query.name;
   try {
     if (id || name) {
-      const perms = await getRole(id as string, name as string);
-      writeSuccess(res, perms);
+      const role = await getRole(id as string, name as string);
+      writeSuccess(res, role);
     } else {
-      const perms = await findPermissions();
-      writeSuccess(res, perms);
+      const roles = await findRole();
+      writeSuccess(res, roles);
     }
   } catch (exp) {
     console.log(exp);

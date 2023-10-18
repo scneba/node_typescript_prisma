@@ -29,3 +29,19 @@ export const getRole = async function (
 export const findRole = async function (): Promise<Role[] | null> {
   return Role.find();
 };
+export const deleteDbRole = async function (id: string) {
+  await Role.findOneAndRemove<Role>({ _id: id });
+  return id;
+};
+
+export const replaceRole = async function (
+  id: string,
+  name: string,
+  permIds: string[]
+) {
+  const role = await Role.replaceOne(
+    { _id: id },
+    { name, permissions: permIds }
+  );
+  return id;
+};

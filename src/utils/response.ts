@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { type Error } from "./errors";
+import { type Error } from "./error_builder";
 export const writeResponse = function (
   res: Response,
   data: Record<string, any> | Record<string, any>[] | string | null,
@@ -17,7 +17,7 @@ export const writeResponse = function (
 
 export const writeSuccess = (
   res: Response,
-  data: Record<string, any> | Record<string, any>[] | string | null,
+  data: Record<string, any> | Record<string, any>[] | string | null = null,
   errors: Error[] = []
 ) => {
   writeResponse(res, data, errors, 200);

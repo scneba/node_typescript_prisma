@@ -1,10 +1,12 @@
-import passport from "passport";
+import passport, { use } from "passport";
 import { Strategy } from "passport-local";
 import { User } from "../../model/user";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import { writeSuccess } from "../../utils/response";
 import { IncorrectLogin } from "./errors";
+import { Actions, Resources } from "../../data";
+import { getUser, getUserPermissions } from "../../data/userMong";
 
 export const strategy = new Strategy(
   async (username: string, password: string, done: any) => {
@@ -59,4 +61,30 @@ export const login = async function (
       });
     }
   )(req, res, next);
+};
+
+export const authorizeRequest = function (
+  action: Actions,
+  resource: Resources
+) {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    if (req.isAuthenticated()) {
+      const user = req.user as any;
+      const email = user.email;
+      if (email) {
+        const perms = await getUserPermissions(email);
+        if (perms) {
+          for (let role of perms.roles) {
+            for (let perm of role.permissions) {
+              if (perm.action === action && perm.resource === resource) {
+                next();
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+    res.status(403).end();
+  };
 };

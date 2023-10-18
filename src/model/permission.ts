@@ -1,5 +1,5 @@
 import { model, Schema, Types } from "mongoose";
-import { actions } from "../data";
+import { Actions } from "../data";
 
 export interface Permission {
   name: string;
@@ -12,7 +12,7 @@ const permissionSchema = new Schema<Permission>({
   name: { type: String, maxlength: 50 },
   action: {
     type: String,
-    enum: actions,
+    enum: Actions,
     default: "get"
   },
   resource: { type: String, maxlength: 50 },

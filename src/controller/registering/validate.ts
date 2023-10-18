@@ -1,12 +1,11 @@
-import { isValidObjectId } from "mongoose";
 import { getRole } from "../../data/role";
 import { Permission } from "../../model/permission";
-import { type Error, addError, buildError } from "../../utils/errors";
-import * as errors from "./errors";
+import { type Error, addError, buildError } from "../../utils/error_builder";
+import * as sharedErrors from "../../utils/shared_errors";
 import { getUser } from "../../data/userMong";
 import type { User } from "../../model/user";
 import { getPermission } from "../../data/permission";
-import { actions, resources } from "../../data";
+import { Actions, Resources, isObjectIdValid } from "../../data";
 export const validateUser = async (
   firstName: string,
   lastName: string,
@@ -17,8 +16,8 @@ export const validateUser = async (
   roles: string[]
 ): Promise<Error[]> => {
   const data = {
-    first_name: firstName,
-    last_name: lastName,
+    firstName,
+    lastName,
     email,
     phone,
     gender,
@@ -26,14 +25,20 @@ export const validateUser = async (
   };
   let errs: Error[] = [];
   if (!email) {
-    errs = addError(errs, errors.Required, "Email  is required", "email", data);
+    errs = addError(
+      errs,
+      sharedErrors.Required,
+      "Email  is required",
+      "email",
+      data
+    );
   } else {
     //TODO validate email
     const user = await getUser("", email);
     if (user) {
       errs = addError(
         errs,
-        errors.Exists,
+        sharedErrors.Exists,
         "Email already exists",
         "email",
         data
@@ -43,19 +48,25 @@ export const validateUser = async (
   if (!firstName) {
     errs = addError(
       errs,
-      errors.Required,
+      sharedErrors.Required,
       "Firstname  is required",
       "first_name",
       data
     );
   }
   if (!phone) {
-    errs = addError(errs, errors.Required, "Phone  is required", "phone", data);
+    errs = addError(
+      errs,
+      sharedErrors.Required,
+      "Phone  is required",
+      "phone",
+      data
+    );
   }
   if (!gender) {
     errs = addError(
       errs,
-      errors.Required,
+      sharedErrors.Required,
       "Gender  is required",
       "gender",
       data
@@ -66,20 +77,26 @@ export const validateUser = async (
   if (!password) {
     errs = addError(
       errs,
-      errors.Required,
+      sharedErrors.Required,
       "Password is required",
       "password",
       data
     );
   }
   if (!roles || roles.length == 0) {
-    errs = addError(errs, errors.Required, "role is required", "role", data);
+    errs = addError(
+      errs,
+      sharedErrors.Required,
+      "role is required",
+      "role",
+      data
+    );
   } else {
     for (let roleId of roles) {
-      if (!isValidObjectId(roleId)) {
+      if (!isObjectIdValid(roleId)) {
         addError(
           errs,
-          errors.InvalidObjectId,
+          sharedErrors.InvalidObjectId,
           `role with id ${roleId} is invalid`,
           "roles",
           data
@@ -90,7 +107,7 @@ export const validateUser = async (
       if (!role) {
         addError(
           errs,
-          errors.NotFound,
+          sharedErrors.NotFound,
           `role with id ${roleId} does not exist`,
           "roles",
           data
@@ -103,15 +120,15 @@ export const validateUser = async (
 
 export const validatePermission = async (
   name: string,
-  action: string,
-  resource: string
+  action: Actions,
+  resource: Resources
 ): Promise<Error[]> => {
   let errs: Error[] = [];
   const data = { name, action, resource };
   if (!name) {
     addError(
       errs,
-      errors.Required,
+      sharedErrors.Required,
       "Permission name is required",
       "name",
       data
@@ -121,7 +138,7 @@ export const validatePermission = async (
     if (perm) {
       addError(
         errs,
-        errors.Exists,
+        sharedErrors.Exists,
         "Permission name already exist",
         "name",
         data
@@ -131,15 +148,15 @@ export const validatePermission = async (
   if (!action) {
     addError(
       errs,
-      errors.Required,
+      sharedErrors.Required,
       "Permission action is required",
       "action",
       data
     );
-  } else if (!actions.includes(action)) {
+  } else if (!Actions.includes(action)) {
     addError(
       errs,
-      errors.InvalidAction,
+      sharedErrors.InvalidAction,
       "Permission action is invalid, get, list, create or update accepted",
       "action",
       data
@@ -148,15 +165,15 @@ export const validatePermission = async (
   if (!resource) {
     addError(
       errs,
-      errors.Required,
+      sharedErrors.Required,
       "Permission resource is required",
       "resource",
       data
     );
-  } else if (!resources.includes(resource)) {
+  } else if (!Resources.includes(resource)) {
     addError(
       errs,
-      errors.InvalidResource,
+      sharedErrors.InvalidResource,
       `Resource ${resource} is invalid`,
       "resource",
       data
@@ -166,7 +183,7 @@ export const validatePermission = async (
     if (perm) {
       addError(
         errs,
-        errors.Exists,
+        sharedErrors.Exists,
         `Permission with action and resource already exist with name ${perm.name}`,
         "action",
         data
@@ -182,12 +199,17 @@ export const validateRole = async (
 ): Promise<Error[]> => {
   const data = { name, permissions: perms };
   if (!name) {
-    return buildError(errors.Required, "Role name is required", "name", data);
+    return buildError(
+      sharedErrors.Required,
+      "Role name is required",
+      "name",
+      data
+    );
   }
   const role = await getRole("", name);
   if (role) {
     return buildError(
-      errors.Required,
+      sharedErrors.Required,
       `Role with name ${name} already exists`,
       "name",
       data
@@ -195,7 +217,7 @@ export const validateRole = async (
   }
   if (!perms || perms.length < 1) {
     return buildError(
-      errors.Required,
+      sharedErrors.Required,
       "Permissions are required for role",
       "permissions",
       data
@@ -203,10 +225,10 @@ export const validateRole = async (
   }
   const errs: Error[] = [];
   for (let permId of perms) {
-    if (!isValidObjectId(permId)) {
+    if (!isObjectIdValid(permId)) {
       addError(
         errs,
-        errors.InvalidObjectId,
+        sharedErrors.InvalidObjectId,
         `permission with id ${permId} is invalid`,
         "permissions",
         data
@@ -217,7 +239,7 @@ export const validateRole = async (
     if (!perm) {
       addError(
         errs,
-        errors.NotFound,
+        sharedErrors.NotFound,
         `permission with id ${permId} not found`,
         "permissions",
         data

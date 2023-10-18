@@ -7,7 +7,7 @@ import cookieParser from "cookie-parser";
 var MongoDBStore = require("connect-mongodb-session")(session);
 
 import baseRoutes from "./routes/index";
-import authRoutes from "./routes/auth";
+import authRoutes, { trimStrings } from "./routes/auth";
 import { connect } from "../connectmong";
 import {
   authenticateRequest,
@@ -25,6 +25,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false })); //use querystring
 app.use(cookieParser());
+app.use(trimStrings);
 
 // use a secure file store for production and staging, and temporary one for development
 

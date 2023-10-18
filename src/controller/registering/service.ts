@@ -11,8 +11,8 @@ export const createUser = async function (
   req: Request,
   res: Response<User | string>
 ) {
-  const firstName = req.body.first_name;
-  const lastName = req.body.last_name;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
   const email = req.body.email;
   const phone = req.body.phone;
   const gender = req.body.gender;
@@ -35,7 +35,6 @@ export const createUser = async function (
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
 
     const user = await postUser(
       firstName,
@@ -49,7 +48,7 @@ export const createUser = async function (
     writeSuccess(res, user);
   } catch (e: any) {
     console.error(e.message);
-    res.status(500).send("Ooops");
+    res.status(500).end();
   }
 };
 
