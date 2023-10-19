@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validatePasswordUpdate, validateUser } from "./validate";
 import { writeBadRequest, writeSuccess } from "../../utils/response";
-import { updateDBPassword, updateDBUser } from "../../data/userMong";
+import { updateDBPassword, updateDBUser } from "../../data/user";
 import bcrypt from "bcrypt";
 
 export const updateUser = async (req: Request, res: Response) => {

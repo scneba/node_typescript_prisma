@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { writeBadRequest, writeSuccess } from "../../utils/response";
 import { validatePermission, validateUser, validateRole } from "./validate";
-import { postUser } from "../../data/userMong";
+import { postUser } from "../../data/user";
 import { postPermission } from "../../data/permission";
 import { postRole } from "../../data/role";
 import { User } from "../../model/user";

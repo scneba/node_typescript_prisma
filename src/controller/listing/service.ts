@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { writeSuccess } from "../../utils/response";
 import { getPermission, findPermissions } from "../../data/permission";
 import { findRole, getRole } from "../../data/role";
-import { findUsers, getUser } from "../../data/userMong";
+import { findUsers, getUser } from "../../data/user";
 
 export const getPermissions = async (req: Request, res: Response) => {
   const id = req.query.id;

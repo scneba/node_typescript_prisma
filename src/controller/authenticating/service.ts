@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import { writeSuccess } from "../../utils/response";
 import { IncorrectLogin } from "./errors";
 import { Actions, Resources } from "../../data";
-import { getUser, getUserPermissions } from "../../data/userMong";
+import { getUser, getUserPermissions } from "../../data/user";
 
 export const strategy = new Strategy(
   async (username: string, password: string, done: any) => {
