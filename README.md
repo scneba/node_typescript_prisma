@@ -1,6 +1,6 @@
 ## Node.js/TypeScript/MongoDB Base Backend
 
-This is a base project which helps any node.js developer or startup to setup a base for user/role/permission management, testing, dockerization and CI/CD.
+This is a base project which helps any node.js developer or startup to setup a base for user/role/permission management, testing, dockerization, and CI/CD.
 This is built with Express.js framework, TypeScript, MongoDB database, and tested with Jest and Postman. 
 This is usually a first and difficult step for any startup and this project will get you up and running immediately.
 
@@ -55,23 +55,21 @@ MONGO_URL="mongodb://localhost:27017/nodebase"
 
 ### File structure
 
-**--postman** \
-**--files.json** postman collections. \
-**--src** all source code should be added in here. \
-**--controllers** MVC controllers - all core logic for endpoint control is added here. \
-&nbsp;&nbsp;&nbsp;**--errors.js** All error contants. Any errors reported in this service should be here. \
-&nbsp;&nbsp;&nbsp;**--service.js** All the logic for the sub controller should be added here. \
-&nbsp;&nbsp;&nbsp;**--service.test.js** All tests for this controller should be added here. See the documentation for jest testing [here](https://jestjs.io/docs/getting-started). \
+**--postman**: Postman collection \
+**&nbsp;&nbsp;&nbsp;--nodebase.postman_collection.json** postman collection to import and run on postman. \
+**--src** All source code should be added in here. \
+****&nbsp;&nbsp; --controllers** MVC controllers - all core logic for endpoint control is added here.
+Each folder name ends in "ing" and represents related subcontroller logic. Each subcontroller has the following files \
+&nbsp;&nbsp;&nbsp;**--errors.ts** All subcontroller erros.\
+&nbsp;&nbsp;&nbsp;**--service.ts** All the logic for the subcontroller should be added here. \
+&nbsp;&nbsp;&nbsp;**--service.test.ts** All tests for this subcontroller should be added here. See the documentation for jest testing [here](https://jestjs.io/docs/getting-started). \
 **--data** all database access methods are added here. \
-**--migrations** All Sequelize migrations are added here. See the docs [here](n. \
-**--models** All database models for Sequelize
+**--models** All database models for MongoDB
 **--routes** All routes contained in the repo.
-**--seeders** All Sequelize seeds see [here]s(https://sequelize.org/master/manual/migrations.html#running-seeds) for the docs. \
-**--services** All access to external services are added here, cross platform requests. \
-**--utils** Any reusable javascript code \
-**--app.js** entry point of application. \
-**--migrate.js** service to run migrations when user first runs app. \
-**--storage** storage for sessions
+**--seeder** All MongoDB Seeds are added here. \
+**--utils** Any reusable typescript code \
+**--index.ts** entry point of application. \
+**--connectmong.ts** service to connect to mongodb\
 
 ### Run Seeds
 - Update the connection string on line 19, src/seeder/seeder.ts to your mongodb connection string. 
