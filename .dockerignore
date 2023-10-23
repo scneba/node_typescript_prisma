@@ -1,0 +1,8 @@
+node_modules/
+.git/
+.gitlab-ci.yml
+docker-compose.yml
+Dockerfile
+src/config/
+storage/*
+README.md

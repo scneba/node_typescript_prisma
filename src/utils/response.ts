@@ -32,5 +32,5 @@ export const writeCreated = (
 };
 
 export const writeBadRequest = (res: Response, errors: Error[] = []) => {
-  writeResponse(res, "", errors, 400);
+  writeResponse(res, null, errors, 400);
 };
