@@ -77,7 +77,13 @@ Each folder name ends in "ing" and represents related subcontroller logic. Each 
 - Run this command in the root folder to run the seeds on the database
 
 ```
-npx tsnd src\seeder\seeder.ts
+npx tsnd src/seeder/seeder.ts
+```
+
+or cd into the folder if it fails and run
+
+```
+npx tsnd seeder.ts
 ```
 
 ### Testing
