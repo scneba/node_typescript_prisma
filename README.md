@@ -1,7 +1,7 @@
 ## Node.js/TypeScript/MongoDB Base Backend
 
 This is a base project which helps any node.js developer or startup to setup a base for user/role/permission management, testing, dockerization, and CI/CD.
-This is built with Express.js framework, TypeScript, MongoDB database, and tested with Jest and Postman. 
+This is built with Express.js framework, TypeScript, MongoDB database, and tested with Jest and Postman.
 This is usually a first and difficult step for any startup and this project will get you up and running immediately.
 
 ### Technologies and Resources
@@ -17,8 +17,8 @@ This is usually a first and difficult step for any startup and this project will
 
 ### Setup
 
-1. Download and Install your variant of MongoDB from [here](https://www.mongodb.com/try/download/compass).
-2. Open the app and create a database called *nodebase*. 
+1. Download and Install your variant of MongoDB from [here](https://www.mongodb.com/try/download/community).
+2. Open the app and create a database called _nodebase_.
 
 3. Install Node.js. Download your variant from [here](https://nodejs.org/en/download/)
 
@@ -47,9 +47,9 @@ npm install
 MONGO_URL="mongodb://localhost:27017/nodebase"
 ```
 
-8. Run `npm run dev` on the root folder to start the project. 
+8. Run `npm run dev` on the root folder to start the project.
 
-10. Install postman and create an account. Download from [here](https://www.postman.com/downloads/).
+9. Install postman and create an account. Download from [here](https://www.postman.com/downloads/).
 
 ## Development
 
@@ -58,7 +58,7 @@ MONGO_URL="mongodb://localhost:27017/nodebase"
 **--postman**: Postman collection \
 **&nbsp;&nbsp;&nbsp;--nodebase.postman_collection.json** postman collection to import and run on postman. \
 **--src** All source code should be added in here. \
-****&nbsp;&nbsp; --controllers** MVC controllers - all core logic for endpoint control is added here.
+\***\*&nbsp;&nbsp; --controllers** MVC controllers - all core logic for endpoint control is added here.
 Each folder name ends in "ing" and represents related subcontroller logic. Each subcontroller has the following files \
 &nbsp;&nbsp;&nbsp;**--errors.ts** All subcontroller erros.\
 &nbsp;&nbsp;&nbsp;**--service.ts** All the logic for the subcontroller should be added here. \
@@ -72,12 +72,13 @@ Each folder name ends in "ing" and represents related subcontroller logic. Each 
 **--connectmong.ts** service to connect to mongodb\
 
 ### Run Seeds
-- Update the connection string on line 19, src/seeder/seeder.ts to your mongodb connection string. 
+
+- Update the connection string on line 19, src/seeder/seeder.ts to your mongodb connection string.
 - Run this command in the root folder to run the seeds on the database
+
 ```
 npx tsnd src\seeder\seeder.ts
 ```
-
 
 ### Testing
 
