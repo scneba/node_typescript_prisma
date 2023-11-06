@@ -3,7 +3,6 @@ import { Permission } from "../../model/permission";
 import { type Error, addError, buildError } from "../../utils/error_builder";
 import * as sharedErrors from "../../utils/shared_errors";
 import { getUser } from "../../data/user";
-import type { User } from "../../model/user";
 import { getPermission } from "../../data/permission";
 import { Actions, Resources, isObjectIdValid } from "../../data";
 export const validateUser = async (

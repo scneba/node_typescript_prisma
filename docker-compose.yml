@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  test:
+    build:
+      context: .
+    container_name: nodebase
+    image: clasence/nodebase:latest
+    volumes:
+      - test_storage:/usr/src/app/storage
+    environment:
+      - MONGO_URL="mongodb://host.docker.internal:27017/hail"
+      - TOKEN="test token"
+      - COOKIE_SECRET="somesecret"
+      - NODE_ENV="staging"
+      - PORT=3001
+    ports:
+      - "3001:3001"
+
+  # prod:
+  #   build:
+  #     context: .
+  #   container_name: rolebase-prod
+  #   image: clasence/rolebase:latest
+  #   volumes:
+  #     - prod_storage:/usr/src/app/storage
+  #   environment:
+  #     - CONN_ST=${CONN_ST}
+  #     - TOKEN=${TOKEN}
+  #     - NODE_ENV=production
+  #     - COOKIE_SECRET=${COOKIE_SECRET}
+  #   ports:
+  #     - "10102:10107"
+volumes:
+  test_storage:
+  prod_storage:
