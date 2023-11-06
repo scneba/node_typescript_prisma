@@ -9,13 +9,13 @@ services:
     volumes:
       - test_storage:/usr/src/app/storage
     environment:
-      - MONGO_URL="mongodb://host.docker.internal:27017/hail"
-      - TOKEN="test token"
-      - COOKIE_SECRET="somesecret"
-      - NODE_ENV="staging"
+      - MONGO_URL=mongodb://host.docker.internal:27017/hail
+      - TOKEN=test token
+      - COOKIE_SECRET=somesecret
+      - NODE_ENV=staging
       - PORT=3001
     ports:
-      - "3001:3001"
+      - 3001:3001
 
   # prod:
   #   build:
