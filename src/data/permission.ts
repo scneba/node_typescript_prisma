@@ -1,5 +1,4 @@
 import { Permission } from "../model/permission";
-import mongoose, { Types } from "mongoose";
 
 export const postPermission = async function (
   name: string,

@@ -62,6 +62,7 @@ export const validateUser = async (
       data
     );
   }
+  //TODO validate phone number
   if (!gender) {
     errs = addError(
       errs,
@@ -82,6 +83,8 @@ export const validateUser = async (
       data
     );
   }
+  //TODO validate password.
+  // should be atleast 8 chars, should have a number, upper and lower case
   if (!roles || roles.length == 0) {
     errs = addError(
       errs,
