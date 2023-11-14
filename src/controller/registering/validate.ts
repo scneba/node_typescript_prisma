@@ -61,6 +61,8 @@ export const validateUser = async (
       "phone",
       data
     );
+  } else {
+    //TODO check for duplicates
   }
   //TODO validate phone number
   if (!gender) {
@@ -72,6 +74,15 @@ export const validateUser = async (
       data
     );
   } else {
+    if (!["Male", "Female"].includes(gender)) {
+      errs = addError(
+        errs,
+        sharedErrors.Required,
+        "Invalid gender, should be M or F",
+        "gender",
+        data
+      );
+    }
   }
 
   if (!password) {
@@ -85,38 +96,38 @@ export const validateUser = async (
   }
   //TODO validate password.
   // should be atleast 8 chars, should have a number, upper and lower case
-  if (!roles || roles.length == 0) {
-    errs = addError(
-      errs,
-      sharedErrors.Required,
-      "role is required",
-      "role",
-      data
-    );
-  } else {
-    for (let roleId of roles) {
-      if (!isObjectIdValid(roleId)) {
-        addError(
-          errs,
-          sharedErrors.InvalidObjectId,
-          `role with id ${roleId} is invalid`,
-          "roles",
-          data
-        );
-        continue;
-      }
-      const role = await getRole(roleId);
-      if (!role) {
-        addError(
-          errs,
-          sharedErrors.NotFound,
-          `role with id ${roleId} does not exist`,
-          "roles",
-          data
-        );
-      }
-    }
-  }
+  // if (!roles || roles.length == 0) {
+  //   errs = addError(
+  //     errs,
+  //     sharedErrors.Required,
+  //     "role is required",
+  //     "role",
+  //     data
+  //   );
+  // } else {
+  //   for (let roleId of roles) {
+  //     if (!isObjectIdValid(roleId)) {
+  //       addError(
+  //         errs,
+  //         sharedErrors.InvalidObjectId,
+  //         `role with id ${roleId} is invalid`,
+  //         "roles",
+  //         data
+  //       );
+  //       continue;
+  //     }
+  //     const role = await getRole(roleId);
+  //     if (!role) {
+  //       addError(
+  //         errs,
+  //         sharedErrors.NotFound,
+  //         `role with id ${roleId} does not exist`,
+  //         "roles",
+  //         data
+  //       );
+  //     }
+  //   }
+  // }
   return errs;
 };
 

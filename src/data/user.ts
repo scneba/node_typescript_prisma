@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../model/user";
+import prisma from "../prismaclient";
+import { Prisma, User as Users, Gender } from "@prisma/client";
 
 export const postUser = async function (
   firstName: string,
@@ -9,50 +11,65 @@ export const postUser = async function (
   gender: "Male" | "Female",
   password: string,
   roles: string[]
-) {
-  try {
-    //no need to use transactions, just a test.
-    const session = await mongoose.startSession();
-    let savedUser: User | null = null;
-    await session.withTransaction(async () => {
-      savedUser = await User.create({
-        firstName,
-        lastName,
-        phone,
-        email,
-        gender,
-        password,
-        roles
-      });
-    });
-    if (savedUser) {
-      return savedUser;
-    }
-    throw "Unable to save user";
-  } catch (exp) {
-    throw exp;
+): Promise<Partial<Users> | null> {
+  let g: Gender = Gender.MALE;
+  if (gender === "Female") {
+    g = Gender.FEMALE;
   }
+  const { id } = await prisma.user.create({
+    data: {
+      firstName,
+      lastName,
+      phone,
+      email,
+      username: email,
+      password,
+      gender: g
+    }
+  });
+  return getUser(id);
 };
 
 export const getUser = async function (
   id: string,
   email?: string,
   includePassword: boolean = false
-): Promise<Partial<User> | null> {
+): Promise<Partial<Users> | null> {
+  if (!id && !email) {
+    return null;
+  }
+  const where = {} as any;
   if (id) {
-    if (includePassword) return User.findById(id).populate("roles");
-    else return User.findById(id).select("-password").populate("roles");
+    where.id = id;
   }
   if (email) {
-    if (includePassword) return User.findOne({ email }).populate("roles");
-    else return User.findOne({ email }).select("-password").populate("roles");
+    where.email = email;
   }
-  return null;
+
+  if (includePassword) {
+    return prisma.user.findUnique({ where });
+  } else {
+    return prisma.user.findUnique({
+      where,
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        gender: true,
+        phone: true,
+        createdAt: true,
+        username: true,
+        password: false
+      }
+    });
+  }
 };
 
-export const findUsers = async function (): Promise<User[] | null> {
-  return User.find().select("-password");
+export const findUsers = async function (): Promise<Partial<Users>[] | null> {
+  return prisma.user.findMany({ select: { password: false } });
 };
+
 export const updateDBUser = async function (
   id: string,
   firstName: string,

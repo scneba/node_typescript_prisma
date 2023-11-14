@@ -1,7 +1,7 @@
-import { isValidObjectId } from "mongoose";
+import { validate } from "uuid";
 
 export const isObjectIdValid = (id: string) => {
-  if (isValidObjectId(id)) {
+  if (validate(id)) {
     return true;
   }
   return false;
