@@ -1,16 +1,23 @@
 import { Request, Response } from "express";
 import { writeBadRequest, writeSuccess } from "../../utils/response";
-import { validatePermission, validateUser, validateRole } from "./validate";
+import {
+  validatePermission,
+  validateUser,
+  validateRole,
+  validateRoleAssignment,
+  validatePortofolio
+} from "./validate";
 import { postUser } from "../../data/user";
+import {
+  assignRole as assignDBRole,
+  unassignDBRole
+} from "../../data/userrole";
 import { postPermission } from "../../data/permission";
 import { postRole } from "../../data/role";
-import { User } from "../../model/user";
 import bcrypt from "bcrypt";
+import { postPortfolio } from "../../data/portfolio";
 
-export const createUser = async function (
-  req: Request,
-  res: Response<User | string>
-) {
+export const createUser = async function (req: Request, res: Response) {
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;
   const email = req.body.email;
@@ -81,6 +88,60 @@ export const createRole = async function (req: Request, res: Response) {
     }
     const role = await postRole(name, perms);
     writeSuccess(res, role);
+  } catch (e: any) {
+    console.error(e);
+    res.status(500).end();
+  }
+};
+
+export const assignRoles = async function (req: Request, res: Response) {
+  try {
+    const userId = req.params.id;
+    const portfolioId = req.body.portfolio;
+    const user = (req.user as any).email;
+    const roleIds = req.body.roles;
+    const errs = await validateRoleAssignment(userId, portfolioId, roleIds);
+    if (errs.length > 0) {
+      writeBadRequest(res, errs);
+      return;
+    }
+    await assignDBRole(userId, portfolioId, user as string, roleIds);
+    writeSuccess(res, userId);
+  } catch (e: any) {
+    console.error(e);
+    res.status(500).end();
+  }
+};
+
+export const unassignRoles = async function (req: Request, res: Response) {
+  try {
+    const userId = req.params.id;
+    const portfolioId = req.body.portfolio;
+    const user = (req.user as any).email;
+    const roleIds = req.body.roles;
+    const errs = await validateRoleAssignment(userId, portfolioId, roleIds);
+    if (errs.length > 0) {
+      writeBadRequest(res, errs);
+      return;
+    }
+    const count = await unassignDBRole(userId, portfolioId, roleIds);
+    writeSuccess(res, { count });
+  } catch (e: any) {
+    console.error(e);
+    res.status(500).end();
+  }
+};
+
+export const createPortfolio = async function (req: Request, res: Response) {
+  try {
+    const name = req.body.name;
+    const errs = await validatePortofolio(name);
+    if (errs.length > 0) {
+      writeBadRequest(res, errs);
+      return;
+    }
+    const pf = await postPortfolio(name);
+    writeSuccess(res, pf);
   } catch (e: any) {
     console.error(e);
     res.status(500).end();

@@ -3,13 +3,17 @@ import { writeSuccess } from "../../utils/response";
 import { getPermission, findPermissions } from "../../data/permission";
 import { findRole, getRole } from "../../data/role";
 import { findUsers, getUser } from "../../data/user";
+import { getAllPortofolio, getPortfolio } from "../../data/portfolio";
 
 export const getPermissions = async (req: Request, res: Response) => {
   const id = req.query.id;
   const name = req.query.name;
   try {
     if (id || name) {
-      const perms = await getPermission(id as string, name as string);
+      const perms = await getPermission({
+        id: id as string,
+        name: name as string
+      });
       writeSuccess(res, perms);
     } else {
       const perms = await findPermissions();
@@ -64,5 +68,21 @@ export const getCurrentUser = async (req: Request, res: Response) => {
       console.log(exp);
       res.status(500).end();
     }
+  }
+};
+export const getPortfolios = async function (req: Request, res: Response) {
+  const id = req.body.id;
+  const name = req.body.name;
+  try {
+    if (id || name) {
+      const pf = await getPortfolio(id, name);
+      writeSuccess(res, pf);
+    } else {
+      const pf = await getAllPortofolio();
+      writeSuccess(res, pf);
+    }
+  } catch (exp) {
+    console.log(exp);
+    res.status(500).end();
   }
 };

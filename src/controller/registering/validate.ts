@@ -1,10 +1,11 @@
 import { getRole } from "../../data/role";
-import { Permission } from "../../model/permission";
-import { type Error, addError, buildError } from "../../utils/error_builder";
+import { type Error, addError } from "../../utils/error_builder";
 import * as sharedErrors from "../../utils/shared_errors";
 import { getUser } from "../../data/user";
 import { getPermission } from "../../data/permission";
 import { Actions, Resources, isObjectIdValid } from "../../data";
+import { getPortfolio } from "../../data/portfolio";
+import { getPermissions } from "../listing/service";
 export const validateUser = async (
   firstName: string,
   lastName: string,
@@ -94,43 +95,68 @@ export const validateUser = async (
       data
     );
   }
-  //TODO validate password.
-  // should be atleast 8 chars, should have a number, upper and lower case
-  // if (!roles || roles.length == 0) {
-  //   errs = addError(
-  //     errs,
-  //     sharedErrors.Required,
-  //     "role is required",
-  //     "role",
-  //     data
-  //   );
-  // } else {
-  //   for (let roleId of roles) {
-  //     if (!isObjectIdValid(roleId)) {
-  //       addError(
-  //         errs,
-  //         sharedErrors.InvalidObjectId,
-  //         `role with id ${roleId} is invalid`,
-  //         "roles",
-  //         data
-  //       );
-  //       continue;
-  //     }
-  //     const role = await getRole(roleId);
-  //     if (!role) {
-  //       addError(
-  //         errs,
-  //         sharedErrors.NotFound,
-  //         `role with id ${roleId} does not exist`,
-  //         "roles",
-  //         data
-  //       );
-  //     }
-  //   }
-  // }
+
   return errs;
 };
+export const validateRoleAssignment = async function (
+  userId: string,
+  portfolioId: string,
+  roleIds: string[]
+): Promise<Error[]> {
+  let errs: Error[] = [];
+  const data = { user_id: userId, portfolio: portfolioId, roles: roleIds };
+  if (!userId) {
+    addError(
+      errs,
+      sharedErrors.Required,
+      "User ID  is required",
+      "user_id",
+      data
+    );
+  } else {
+    const user = await getUser(userId);
+    if (!user) {
+      addError(
+        errs,
+        sharedErrors.Exists,
+        "User does not exist",
+        "user_id",
+        data
+      );
+    }
+  }
 
+  if (!portfolioId) {
+    addError(
+      errs,
+      sharedErrors.Required,
+      "Portfolio ID  is required",
+      "portfolio",
+      data
+    );
+  } else {
+    //TODO validate portfolio
+  }
+
+  if (!roleIds || roleIds.length < 1) {
+    addError(errs, sharedErrors.Required, "Roles are required", "roles", data);
+  } else {
+    for (let roleId of roleIds) {
+      const role = await getRole(roleId);
+      if (!role) {
+        addError(
+          errs,
+          sharedErrors.NotFound,
+          "Role with ID " + roleId + " not found",
+          "roles",
+          data
+        );
+      }
+    }
+  }
+
+  return errs;
+};
 export const validatePermission = async (
   name: string,
   action: Actions,
@@ -147,7 +173,7 @@ export const validatePermission = async (
       data
     );
   } else {
-    const perm = await Permission.findOne({ name });
+    const perm = await getPermission({ name });
     if (perm) {
       addError(
         errs,
@@ -192,7 +218,7 @@ export const validatePermission = async (
       data
     );
   } else {
-    const perm = await Permission.findOne({ action, resource });
+    const perm = await getPermission({ action, resource });
     if (perm) {
       addError(
         errs,
@@ -211,51 +237,79 @@ export const validateRole = async (
   perms: string[]
 ): Promise<Error[]> => {
   const data = { name, permissions: perms };
+  const errs: Error[] = [];
   if (!name) {
-    return buildError(
+    addError(
+      errs,
       sharedErrors.Required,
       "Role name is required",
       "name",
       data
     );
-  }
-  const role = await getRole("", name);
-  if (role) {
-    return buildError(
-      sharedErrors.Required,
-      `Role with name ${name} already exists`,
-      "name",
-      data
-    );
+  } else {
+    const role = await getRole("", name);
+    if (role) {
+      return addError(
+        errs,
+        sharedErrors.Required,
+        `Role with name ${name} already exists`,
+        "name",
+        data
+      );
+    }
   }
   if (!perms || perms.length < 1) {
-    return buildError(
+    return addError(
+      errs,
       sharedErrors.Required,
       "Permissions are required for role",
       "permissions",
       data
     );
-  }
-  const errs: Error[] = [];
-  for (let permId of perms) {
-    if (!isObjectIdValid(permId)) {
-      addError(
-        errs,
-        sharedErrors.InvalidObjectId,
-        `permission with id ${permId} is invalid`,
-        "permissions",
-        data
-      );
-      continue;
+  } else {
+    for (let permId of perms) {
+      if (!isObjectIdValid(permId)) {
+        addError(
+          errs,
+          sharedErrors.InvalidObjectId,
+          `permission with id ${permId} is invalid`,
+          "permissions",
+          data
+        );
+        continue;
+      }
+      const perm = await getPermission({ id: permId });
+      if (!perm) {
+        addError(
+          errs,
+          sharedErrors.NotFound,
+          `permission with id ${permId} not found`,
+          "permissions",
+          data
+        );
+      }
     }
-    const perm = await getPermission(permId);
-    if (!perm) {
+  }
+  return errs;
+};
+
+export const validatePortofolio = async function (name: string) {
+  const errs: Error[] = [];
+  if (!name) {
+    addError(errs, sharedErrors.Required, "Porfolio name is required", "name", {
+      name
+    });
+  } else {
+    const perm = await getPortfolio("", name);
+    if (perm) {
       addError(
         errs,
-        sharedErrors.NotFound,
-        `permission with id ${permId} not found`,
-        "permissions",
-        data
+        sharedErrors.Exists,
+        "Porfolio name already exists",
+        "name",
+        {
+          name
+        }
       );
     }
   }

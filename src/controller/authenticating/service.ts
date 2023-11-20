@@ -1,6 +1,5 @@
 import passport, { use } from "passport";
 import { Strategy } from "passport-local";
-import { User } from "../../model/user";
 import { Request, Response, NextFunction } from "express";
 import bcrypt from "bcrypt";
 import { writeSuccess } from "../../utils/response";
@@ -11,11 +10,11 @@ import { getUser, getUserPermissions } from "../../data/user";
 export const strategy = new Strategy(
   async (username: string, password: string, done: any) => {
     try {
-      const user = await User.findOne({ email: username });
+      const user = await getUser("", username, true);
       if (!user) {
         return done(null, false, { message: IncorrectLogin });
       }
-      const match = await bcrypt.compare(password, user.password);
+      const match = await bcrypt.compare(password, user.password!);
       if (!match) {
         return done(null, false, { message: IncorrectLogin });
       }
@@ -73,14 +72,10 @@ export const authorizeRequest = function (
       const email = user.email;
       if (email) {
         const perms = await getUserPermissions(email);
-        if (perms) {
-          for (let role of perms.roles) {
-            for (let perm of role.permissions) {
-              if (perm.action === action && perm.resource === resource) {
-                next();
-                return;
-              }
-            }
+        for (let perm of perms) {
+          if (perm.action === action && perm.resource === resource) {
+            next();
+            return;
           }
         }
       }

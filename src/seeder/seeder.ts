@@ -5,14 +5,14 @@ import { Permission } from "../model/permission";
 import bcrypt from "bcrypt";
 
 // Define custom hex values for ObjectIDs
-const permissionObjectId1 = "5f6a3a71b9f6d033a0d171d1";
-const permissionObjectId2 = "5f6a3a71b9f6d033a0d171d2";
-const permissionObjectId3 = "5f6a3a71b9f6d033a0d171d3";
-const roleObjectId1 = "5f6a3a71b9f6d033a0d171d3";
-const roleObjectId2 = "5f6a3a71b9f6d033a0d171d4";
-const roleObjectId3 = "5f6a3a71b9f6d033a0d171d8";
-const userObjectId1 = "5f6a3a71b9f6d033a0d171d5";
-const userObjectId2 = "5f6a3a71b9f6d033a0d171d6";
+const permissionObjectId1 = "7ce65b0c-732e-445a-a611-16f61a6882e5";
+const permissionObjectId2 = "d5b5d0a3-dc7c-45b5-a2fa-2c5958dee628";
+const permissionObjectId3 = "3118877c-fdb0-43d3-aacf-0c9096c4cc94";
+const roleObjectId1 = "a4d4e526-f796-4925-a952-f2b0c493d4fb";
+const roleObjectId2 = "9a9350e4-fe75-41a9-852a-20f719685685";
+const roleObjectId3 = "8525e4cb-c29f-4695-adf1-d97bf3b68586";
+const userObjectId1 = "4bc06ab0-69e9-4419-b481-a85a5ea556d5";
+const userObjectId2 = "fea6363f-2203-4492-a93b-f147a4177d91";
 const password1 = bcrypt.hashSync("some pass", 10);
 
 // Connect to your MongoDB database

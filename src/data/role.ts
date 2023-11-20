@@ -1,5 +1,3 @@
-import { Permission } from "../model/permission";
-import { Role, RolePermission, UserRole } from "@prisma/client";
 import prisma from "../prismaclient";
 
 export const postRole = async (name: string, permIds: string[]) => {

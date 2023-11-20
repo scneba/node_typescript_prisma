@@ -9,16 +9,27 @@ export const postPermission = async function (
   return prisma.permission.create({ data: { name, action, resource } });
 };
 
-export const getPermission = async function (
-  id?: string,
-  name?: string
-): Promise<Permission | null> {
+export const getPermission = async function ({
+  id,
+  name,
+  action,
+  resource
+}: {
+  id?: string;
+  name?: string;
+  action?: string;
+  resource?: string;
+}): Promise<Permission | null> {
   if (id) {
     return prisma.permission.findUnique({ where: { id } });
   }
   if (name) {
     return prisma.permission.findUnique({ where: { name } });
   }
+  if (action && resource) {
+    return prisma.permission.findFirst({ where: { action, resource } });
+  }
+
   return null;
 };
 

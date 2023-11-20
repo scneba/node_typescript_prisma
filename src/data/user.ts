@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
-import { User } from "../model/user";
 import prisma from "../prismaclient";
-import { Prisma, User as Users, Gender } from "@prisma/client";
+import { User, Gender, Permission } from "@prisma/client";
 
 export const postUser = async function (
   firstName: string,
@@ -11,7 +10,7 @@ export const postUser = async function (
   gender: "Male" | "Female",
   password: string,
   roles: string[]
-): Promise<Partial<Users> | null> {
+): Promise<Partial<User> | null> {
   let g: Gender = Gender.MALE;
   if (gender === "Female") {
     g = Gender.FEMALE;
@@ -34,7 +33,7 @@ export const getUser = async function (
   id: string,
   email?: string,
   includePassword: boolean = false
-): Promise<Partial<Users> | null> {
+): Promise<Partial<User> | null> {
   if (!id && !email) {
     return null;
   }
@@ -66,7 +65,7 @@ export const getUser = async function (
   }
 };
 
-export const findUsers = async function (): Promise<Partial<Users>[] | null> {
+export const findUsers = async function (): Promise<Partial<User>[] | null> {
   return prisma.user.findMany({ select: { password: false } });
 };
 
@@ -77,10 +76,12 @@ export const updateDBUser = async function (
   phone: string,
   gender: "Male" | "Female",
   roles: string[]
-): Promise<User | null> {
-  const updates: Partial<Omit<User, "email" | "password" | "roles">> & {
-    roles?: string[];
-  } = {};
+): Promise<Partial<User> | null> {
+  let g: Gender = Gender.MALE;
+  if (gender === "Female") {
+    g = Gender.FEMALE;
+  }
+  const updates = {} as any;
   if (firstName) {
     updates.firstName = firstName;
   }
@@ -91,35 +92,37 @@ export const updateDBUser = async function (
     updates.phone = phone;
   }
   if (gender) {
-    updates.gender = gender;
+    updates.gender = g;
   }
-  if (roles && roles.length > 0) {
-    updates.roles = roles;
-  }
+  //TODO update roles
+  // if (roles && roles.length > 0) {
+  //   updates.roles = roles;
+  // }
   try {
-    await User.updateOne({ _id: id }, updates);
-    return User.findById(id).populate("roles");
+    await prisma.user.update({ where: { id }, data: updates });
+    return getUser(id);
   } catch (exp) {
     throw exp;
   }
 };
 export const updateDBPassword = async function (id: string, newPass: string) {
-  return User.updateOne({ _id: id }, { password: newPass });
+  return prisma.user.update({ where: { id }, data: { password: newPass } });
 };
 
-export const getUserPermissions = async function (email: string) {
-  const perms = await User.findOne({ email })
-    .select("roles")
-    .populate([
-      {
-        path: "roles",
-        select: "permissions",
-        populate: {
-          path: "permissions",
-          select: "action resource"
-        }
-      }
-    ])
-    .exec();
-  return perms;
+export const getUserPermissions = async function (
+  email: string
+): Promise<Permission[]> {
+  const perms: Permission[] = await prisma.$queryRaw`
+  SELECT p.id, p.name, p.action, p.resource, p.created_at
+FROM "users" u
+JOIN "user_roles" ur ON u.id = ur.user_id
+JOIN "roles" r ON ur.role_id = r.id
+JOIN "role_permissions" rp ON r.id = rp.role_id
+JOIN "permissions" p ON rp.permission_id = p.id
+WHERE u.email = ${email};
+`;
+  if (perms && perms.length > 0) {
+    return perms;
+  }
+  return [];
 };

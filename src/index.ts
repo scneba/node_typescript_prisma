@@ -4,11 +4,11 @@ import cors from "cors";
 import session from "express-session";
 import passport from "passport";
 import cookieParser from "cookie-parser";
-var MongoDBStore = require("connect-mongodb-session")(session);
+import PgSimple from "connect-pg-simple";
+const PgSessions = PgSimple(session);
 
 import baseRoutes from "./routes/index";
 import authRoutes, { trimStrings } from "./routes/auth";
-import { connect } from "./connectmong";
 import {
   authenticateRequest,
   strategy
@@ -17,8 +17,6 @@ import {
 //For env File
 dotenv.config();
 const env = process.env.NODE_ENV || "development";
-//connect mongodb
-connect();
 const app: Application = express();
 const port = process.env.PORT || 8000;
 app.use(cors());
@@ -29,9 +27,10 @@ app.use(trimStrings);
 
 // use a secure file store for production and staging, and temporary one for development
 
-var store = new MongoDBStore({
-  uri: process.env.MONGO_URL,
-  collection: "sessions"
+var store = new PgSessions({
+  tableName: "sessionss",
+  conString: process.env.DATABASE_URL,
+  createTableIfMissing: true
 });
 // Catch errors
 store.on("error", function (error: any) {
@@ -46,10 +45,10 @@ if (env == "development") {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        maxAge: 30 * 24 * 60 * 60 * 1000,
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         secure: false,
         httpOnly: true
-      } // 30 days
+      }
       // Insert express-session options here
     })
   );

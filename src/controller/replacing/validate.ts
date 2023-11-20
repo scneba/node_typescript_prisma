@@ -58,7 +58,7 @@ export const validateRoleForReplacement = async (
       );
       continue;
     }
-    const perm = await getPermission(permId);
+    const perm = await getPermission({ id: permId });
     if (!perm) {
       addError(
         errs,

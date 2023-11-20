@@ -1,7 +1,6 @@
 import { isObjectIdValid } from "../../data";
 import { getRole } from "../../data/role";
 import { getUser } from "../../data/user";
-import { User } from "../../model/user";
 import { addError, Error } from "../../utils/error_builder";
 import * as sharedErrors from "../../utils/shared_errors";
 import bcrypt from "bcrypt";
