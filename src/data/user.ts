@@ -66,7 +66,19 @@ export const getUser = async function (
 };
 
 export const findUsers = async function (): Promise<Partial<User>[] | null> {
-  return prisma.user.findMany({ select: { password: false } });
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      firstName: true,
+      lastName: true,
+      gender: true,
+      phone: true,
+      createdAt: true,
+      username: true,
+      password: false
+    }
+  });
 };
 
 export const updateDBUser = async function (

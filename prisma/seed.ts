@@ -5,9 +5,11 @@ import bcrypt from "bcrypt";
 const permissionObjectId1 = "7ce65b0c-732e-445a-a611-16f61a6882e5";
 const permissionObjectId2 = "d5b5d0a3-dc7c-45b5-a2fa-2c5958dee628";
 const permissionObjectId3 = "3118877c-fdb0-43d3-aacf-0c9096c4cc94";
+const permissionObjectId4 = "3218877c-fdb0-43d3-aacf-0c9096c4cc94";
 const roleObjectId1 = "a4d4e526-f796-4925-a952-f2b0c493d4fb";
 const roleObjectId2 = "9a9350e4-fe75-41a9-852a-20f719685685";
 const roleObjectId3 = "8525e4cb-c29f-4695-adf1-d97bf3b68586";
+const roleObjectId4 = "9525e4cb-c29f-4695-adf1-d97bf3b68586";
 const userObjectId1 = "4bc06ab0-69e9-4419-b481-a85a5ea556d5";
 const userObjectId2 = "fea6363f-2203-4492-a93b-f147a4177d91";
 const portfolioId1 = "a3ae7ed1-7d05-40da-8c7e-9fcecadb01b2";
@@ -56,6 +58,16 @@ async function main() {
       resource: "permissions"
     }
   });
+  const perms4 = await prisma.permission.upsert({
+    where: { id: permissionObjectId4 },
+    update: {},
+    create: {
+      id: permissionObjectId4,
+      name: "get roles",
+      action: "get",
+      resource: "roles"
+    }
+  });
 
   const role1 = await prisma.role.upsert({
     where: { id: roleObjectId1 },
@@ -79,6 +91,14 @@ async function main() {
     create: {
       id: roleObjectId3,
       name: "reader"
+    }
+  });
+  const role4 = await prisma.role.upsert({
+    where: { id: roleObjectId4 },
+    update: {},
+    create: {
+      id: roleObjectId4,
+      name: "writer"
     }
   });
 
@@ -162,6 +182,22 @@ async function main() {
     update: {},
     create: {
       roleId: role1.id,
+      userId: user1.id,
+      portfolioId: port1.id,
+      assignedBy: "user1@example.com"
+    }
+  });
+  const ur2 = await prisma.userRole.upsert({
+    where: {
+      userId_roleId_portfolioId: {
+        userId: user1.id,
+        roleId: role2.id,
+        portfolioId: port1.id
+      }
+    },
+    update: {},
+    create: {
+      roleId: role2.id,
       userId: user1.id,
       portfolioId: port1.id,
       assignedBy: "user1@example.com"

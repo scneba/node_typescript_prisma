@@ -1,519 +1,756 @@
 {
-  "info": {
-    "_postman_id": "be3d64aa-8f4c-4dce-b1bd-f6149ca5cbde",
-    "name": "NodePrisma",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "5950700"
-  },
-  "item": [
-    {
-      "name": "login",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"username\":\"user1@example.com\",\r\n    \"password\":\"some pass\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{domain}}/auth/login/password",
-          "host": ["{{domain}}"],
-          "path": ["auth", "login", "password"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Add user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"firstName\": \"stk111\",\r\n    \"lastName\":\"neba\",\r\n    \"email\": \"stk{{$randomPassword}}@gmail.com\",\r\n    \"password\": \"some pass\",\r\n    \"gender\":\"Male\",\r\n    \"phone\":\"+237684938493\",\r\n    \"roles\":[\"5f6a3a71b9f6d033a0d171d3\",\"5f6a3a71b9f6d033a0d171d4\"]\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{domain}}/users",
-          "host": ["{{domain}}"],
-          "path": ["users"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "add permission",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.data._id).to.have.length.greaterThan(0);\r",
-              "    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"name\": \"get {{$randomUUID}}\",\r\n    \"action\":\"list\",\r\n    \"resource\":\"users\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{domain}}/permissions",
-          "host": ["{{domain}}"],
-          "path": ["permissions"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "add roles",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"name\":\"admin{{$randomUUID}}\",\r\n     \"permissions\":[\"5f6a3a71b9f6d033a0d171d1\",\"5f6a3a71b9f6d033a0d171d2\"]\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{domain}}/roles",
-          "host": ["{{domain}}"],
-          "path": ["roles"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "put role",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "PUT",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"name\":\"new role\",\r\n    \"permissions\":[\"5f6a3a71b9f6d033a0d171d1\"]\r\n}\r\n",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{domain}}/roles/5f6a3a71b9f6d033a0d171d8",
-          "host": ["{{domain}}"],
-          "path": ["roles", "5f6a3a71b9f6d033a0d171d8"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "delete Role",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.data).to.be.a(\"string\");\r",
-              "    pm.expect(jsonData.data).to.have.length.greaterThan(5);\r",
-              "    // pm.expect(jsonData.data.roles).to.have.length(2);\r",
-              "    //  pm.expect(jsonData.errors).to.have.length(0);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{domain}}/roles/5f6a3a71b9f6d033a0d171d8",
-          "host": ["{{domain}}"],
-          "path": ["roles", "5f6a3a71b9f6d033a0d171d8"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get permissions",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.data).length.greaterThan(0)\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{domain}}/permissions",
-          "host": ["{{domain}}"],
-          "path": ["permissions"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get roles",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.data.name).to.length.to.be.greaterThan(0)\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{domain}}/roles?id=5f6a3a71b9f6d033a0d171d3",
-          "host": ["{{domain}}"],
-          "path": ["roles"],
-          "query": [
-            {
-              "key": "id",
-              "value": "5f6a3a71b9f6d033a0d171d3"
-            }
-          ]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Delete Permission",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.data).to.be.a(\"string\");\r",
-              "    pm.expect(jsonData.data).to.have.length.greaterThan(5);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{domain}}/permissions/5f6a3a71b9f6d033a0d171d3",
-          "host": ["{{domain}}"],
-          "path": ["permissions", "5f6a3a71b9f6d033a0d171d3"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "updateUser",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "pm.test(\"Right body returned\", function () {\r",
-              "    var jsonData = pm.response.json();\r",
-              "    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "PATCH",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"firstName\":\"new firstName\",\r\n    \"lastName\":\"new lastname\",\r\n    \"roles\": [\r\n            \"5f6a3a71b9f6d033a0d171d3\"\r\n        ]\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{domain}}/users/5f6a3a71b9f6d033a0d171d5",
-          "host": ["{{domain}}"],
-          "path": ["users", "5f6a3a71b9f6d033a0d171d5"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "Update password",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "PATCH",
-        "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"newPassword\":\"new pass\",\r\n    \"oldPassword\":\"some pass\"\r\n}",
-          "options": {
-            "raw": {
-              "language": "json"
-            }
-          }
-        },
-        "url": {
-          "raw": "{{domain}}/users/5f6a3a71b9f6d033a0d171d6/password",
-          "host": ["{{domain}}"],
-          "path": ["users", "5f6a3a71b9f6d033a0d171d6", "password"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get current user",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{domain}}/currentUser",
-          "host": ["{{domain}}"],
-          "path": ["currentUser"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "get users",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});\r",
-              "\r",
-              "pm.test(\"body is an array\", function () {\r",
-              "    const resp = pm.response.json()\r",
-              "    pm.expect(resp.data).length.greaterThan(0)\r",
-              "});\r",
-              ""
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{domain}}/users",
-          "host": ["{{domain}}"],
-          "path": ["users"]
-        }
-      },
-      "response": []
-    },
-    {
-      "name": "logout",
-      "event": [
-        {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test(\"200 status test\", function () {\r",
-              "    pm.response.to.have.status(200);\r",
-              "});"
-            ],
-            "type": "text/javascript"
-          }
-        }
-      ],
-      "request": {
-        "method": "POST",
-        "header": [],
-        "url": {
-          "raw": "{{domain}}/auth/logout",
-          "host": ["{{domain}}"],
-          "path": ["auth", "logout"]
-        }
-      },
-      "response": []
-    }
-  ],
-  "event": [
-    {
-      "listen": "prerequest",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    },
-    {
-      "listen": "test",
-      "script": {
-        "type": "text/javascript",
-        "exec": [""]
-      }
-    }
-  ],
-  "variable": [
-    {
-      "key": "domain",
-      "value": "localhost:3001",
-      "type": "string"
-    }
-  ]
+	"info": {
+		"_postman_id": "94ad9964-8fad-4eea-97e3-c419ae622ea1",
+		"name": "NodePrisma",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5950700"
+	},
+	"item": [
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"user1@example.com\",\r\n    \"password\":\"some pass\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/auth/login/password",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"auth",
+						"login",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"stk111\",\r\n    \"lastName\":\"neba\",\r\n    \"email\": \"stk{{$randomPassword}}@gmail.com\",\r\n    \"password\": \"some pass\",\r\n    \"gender\":\"Male\",\r\n    \"phone\":\"+237{{$randomPhoneNumber}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/users",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add permission",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.id).to.have.length.greaterThan(0);\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"get {{$randomUUID}}\",\r\n    \"action\":\"create\",\r\n    \"resource\":\"users\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/permissions",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add roles",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"admin{{$randomUUID}}\",\r\n     \"permissions\":[\"7ce65b0c-732e-445a-a611-16f61a6882e5\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/roles",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add portfolio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"CM {{$randomUUID}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/portfolios",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"portfolios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "put role",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"sweet role {{$randomPassword}}\",\r\n    \"permissions\":[\"d5b5d0a3-dc7c-45b5-a2fa-2c5958dee628\",\"3118877c-fdb0-43d3-aacf-0c9096c4cc94\"]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/roles/8525e4cb-c29f-4695-adf1-d97bf3b68586",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"roles",
+						"8525e4cb-c29f-4695-adf1-d97bf3b68586"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "assign role",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"roles\":[\"8525e4cb-c29f-4695-adf1-d97bf3b68586\",\"9a9350e4-fe75-41a9-852a-20f719685685\" ],\r\n    \"portfolio\":\"a3ae7ed1-7d05-40da-8c7e-9fcecadb01b2\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/users/fea6363f-2203-4492-a93b-f147a4177d91/roles",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"users",
+						"fea6363f-2203-4492-a93b-f147a4177d91",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "unassign role",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"roles\":[\"9a9350e4-fe75-41a9-852a-20f719685685\"],\r\n    \"portfolio\":\"a3ae7ed1-7d05-40da-8c7e-9fcecadb01b2\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/users/4bc06ab0-69e9-4419-b481-a85a5ea556d5/roles",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"users",
+						"4bc06ab0-69e9-4419-b481-a85a5ea556d5",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete Role",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data).to.be.a(\"string\");\r",
+							"    pm.expect(jsonData.data).to.have.length.greaterThan(5);\r",
+							"    // pm.expect(jsonData.data.roles).to.have.length(2);\r",
+							"    //  pm.expect(jsonData.errors).to.have.length(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/roles/9525e4cb-c29f-4695-adf1-d97bf3b68586",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"roles",
+						"9525e4cb-c29f-4695-adf1-d97bf3b68586"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get permissions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data).length.greaterThan(0)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/permissions",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"permissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get roles",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data.name).to.length.to.be.greaterThan(0)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/roles?id=a4d4e526-f796-4925-a952-f2b0c493d4fb",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"roles"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "a4d4e526-f796-4925-a952-f2b0c493d4fb"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get portfolio",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data[0].name).to.length.to.be.greaterThan(0)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/portfolios",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"portfolios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Permission",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.data).to.be.a(\"string\");\r",
+							"    pm.expect(jsonData.data).to.have.length.greaterThan(5);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/permissions/3218877c-fdb0-43d3-aacf-0c9096c4cc94",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"permissions",
+						"3218877c-fdb0-43d3-aacf-0c9096c4cc94"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Right body returned\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.errors).to.have.lengthOf(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\":\"new firstName\",\r\n    \"lastName\":\"new lastname\",\r\n    \"roles\": [\r\n            \"a4d4e526-f796-4925-a952-f2b0c493d4fb\"\r\n        ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/users/fea6363f-2203-4492-a93b-f147a4177d91",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"users",
+						"fea6363f-2203-4492-a93b-f147a4177d91"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newPassword\":\"new pass\",\r\n    \"oldPassword\":\"some pass\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/users/fea6363f-2203-4492-a93b-f147a4177d91/password",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"users",
+						"fea6363f-2203-4492-a93b-f147a4177d91",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get current user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/currentUser",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"currentUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"body is an array\", function () {\r",
+							"    const resp = pm.response.json()\r",
+							"    pm.expect(resp.data).length.greaterThan(0)\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/users",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"200 status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{domain}}/auth/logout",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "domain",
+			"value": "localhost:3001",
+			"type": "string"
+		}
+	]
 }

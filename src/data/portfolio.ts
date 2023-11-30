@@ -7,8 +7,8 @@ export const postPortfolio = async (name: string): Promise<Portfolio> => {
 };
 
 export const getPortfolio = async (
-  id: string,
-  name: string
+  id?: string,
+  name?: string
 ): Promise<Portfolio | null> => {
   let where = {} as any;
   if (id) {

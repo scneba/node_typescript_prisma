@@ -118,7 +118,7 @@ export const validateRoleAssignment = async function (
     if (!user) {
       addError(
         errs,
-        sharedErrors.Exists,
+        sharedErrors.NotFound,
         "User does not exist",
         "user_id",
         data
@@ -136,6 +136,16 @@ export const validateRoleAssignment = async function (
     );
   } else {
     //TODO validate portfolio
+    const port = await getPortfolio(portfolioId);
+    if (!port) {
+      addError(
+        errs,
+        sharedErrors.NotFound,
+        "Portfolio with ID not found",
+        "portfolio",
+        data
+      );
+    }
   }
 
   if (!roleIds || roleIds.length < 1) {
