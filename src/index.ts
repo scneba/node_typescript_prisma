@@ -34,25 +34,11 @@ var store = new PgSessions({
 });
 // Catch errors
 store.on("error", function (error: any) {
-  console.log(error);
+  console.error(error);
+  return;
 });
 
-if (env == "development") {
-  app.use(
-    session({
-      store,
-      secret: process.env.COOKIE_SECRET || "dev",
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        secure: false,
-        httpOnly: true
-      }
-      // Insert express-session options here
-    })
-  );
-} else {
+if (env == "development" || env == "staging") {
   app.use(
     session({
       store,
@@ -64,7 +50,20 @@ if (env == "development") {
         secure: false,
         httpOnly: true
       }
-      // Insert express-session options here
+    })
+  );
+} else {
+  app.use(
+    session({
+      store,
+      secret: process.env.COOKIE_SECRET || "production",
+      resave: false,
+      saveUninitialized: false, //for login sessions only
+      cookie: {
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+        secure: true,
+        httpOnly: true
+      }
     })
   );
 }
@@ -72,7 +71,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.use(strategy);
 app.use("/auth", authRoutes);
-app.use("/", baseRoutes);
+app.use("/", authenticateRequest, baseRoutes);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   res.status(404).end();
