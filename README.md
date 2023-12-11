@@ -1,12 +1,13 @@
 ## Node.js/TypeScript/MongoDB Base Backend
 
-This is a starter project which enables a Startups get up and running with node.js in no time. It provides an auth(user/role/permission) system, testing, dockerization, and CI/CD. It is built with Express.js framework, TypeScript, Prisma ORM, PostgreSQL, and tested with Jest and Postman.
+This is a starter project which enables Startups get up and running with node.js and prisma ORM in no time. It provides an auth(user/role/permission) system, testing, dockerization, and CI/CD. It is built with Express.js framework, TypeScript, Prisma ORM, PostgreSQL, and tested with Jest and Postman.
 This is usually a first and difficult step for any startup and this project will get you up and running immediately.
 
 ### Technologies and Resources
 
 - Node.js
 - Express.js
+- Prisma ORM
 - TypeScript
 - PostgreSQL
 - Postman
@@ -16,8 +17,11 @@ This is usually a first and difficult step for any startup and this project will
 
 ### Setup
 
-1. Download and Install your variant of MongoDB from [here](https://www.mongodb.com/try/download/community).
-2. Download and Install postgres 14.8 [here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). This should come with postgresql and should automatically run after install on port 5432. Make sure to take note of your passwords, there should be a PgAdmin password and the default user password. After install, open git bash and run the following commands to check if postgres is running on same port
+1. Download and install git from [here](https://git-scm.com/downloads). This should also install git bash which can be opened from the windows start menu.
+
+- Install postman and create an account. Download from [here](https://www.postman.com/downloads/).
+
+2. Download and Install postgres 14.8 [here](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads). This should come with postgresql and should automatically run after install on poNrt 5432. Make sure to take note of your passwords, there should be a PgAdmin password and the default user password. After install, open git bash and run the following commands to check if postgres is running on same port
 
 - Start PgAdmin from windows start menu and input your passwords.
 - Create a database called `nodeprisma` with the user postgres.
@@ -64,14 +68,12 @@ DATABASE_URL="postgresql://postgres:PASSWORD@localhost:5432/nodeprisma?schema=pu
 **--postman**: Postman collection \
 **&nbsp;&nbsp;&nbsp;--nodebase.postman_collection.json** postman collection to import and run on postman. \
 **--src** All source code should be added in here. \
-\***\*&nbsp;&nbsp; --controllers** MVC controllers - all core logic for endpoint control is added here.
-Each folder name ends in "ing" and represents related subcontroller logic. Each subcontroller has the following files \
-&nbsp;&nbsp;&nbsp;**--errors.ts** All subcontroller erros.\
+\***\*&nbsp;&nbsp; --controllers** MVC controllers - all core logic for endpoint control is added here. Each folder name ends in "ing" and represents related subcontroller logic. Each subcontroller has the following files \
+&nbsp;&nbsp;&nbsp;**--errors.ts** All subcontroller errors.\
 &nbsp;&nbsp;&nbsp;**--service.ts** All the logic for the subcontroller should be added here. \
 &nbsp;&nbsp;&nbsp;**--validate.ts** All validation logic for controller \
 &nbsp;&nbsp;&nbsp;**--service.test.ts** All tests for this subcontroller should be added here. See the documentation for jest testing [here](https://jestjs.io/docs/getting-started). \
 **--data** all database access methods are added here. \
-**--models** All database models for MongoDB \
 **--routes** All routes contained in the repo. \
 **--utils** Any reusable typescript code \
 **--index.ts** entry point of application. \
